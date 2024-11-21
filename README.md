@@ -13,3 +13,5 @@
 - Last in First out (LIFO) data structure
 - randomly saved in memory
   [Stack](https://github.com/Manuelopez/Neetcode/blob/main/arrays%20%26%20hashing/Contains%20Duplicate.md)
+
+# TODO fix the links
