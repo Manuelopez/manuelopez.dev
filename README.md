@@ -1,7 +1,15 @@
-# Neetcode coding challenge
+# Data Structure
 
-| Problem                     | Leetcode # | Soluion Link                                                                                                                  |
-| --------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Contains Duplicate          | 217        | [solution](https://github.com/Manuelopez/Neetcode/blob/main/arrays%20%26%20hashing/Contains%20Duplicate.md)                   |
-| Valid Palindrome            | 125        | [solution](https://github.com/Manuelopez/Neetcode/blob/main/two%20pointer/Valid%20Palindrome.md)                              |
-| Best Time to Buy Sell Stock | 125        | [solution](https://github.com/Manuelopez/Neetcode/blob/main/sliding%20window/best%20time%20to%20buy%20and%20sell%20strock.md) |
+## Arrays
+
+- contifgius in memory
+- random access
+  [Arrays & hashing](https://github.com/Manuelopez/Neetcode/blob/main/arrays%20%26%20hashing/Contains%20Duplicate.md)
+  [Two Pointer](https://github.com/Manuelopez/Neetcode/blob/main/arrays%20%26%20hashing/Contains%20Duplicate.md)
+  [Sliding Window](https://github.com/Manuelopez/Neetcode/blob/main/arrays%20%26%20hashing/Contains%20Duplicate.md)
+
+## Stack
+
+- Last in First out (LIFO) data structure
+- randomly saved in memory
+  [Stack](https://github.com/Manuelopez/Neetcode/blob/main/arrays%20%26%20hashing/Contains%20Duplicate.md)
