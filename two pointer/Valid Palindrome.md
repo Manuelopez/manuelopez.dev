@@ -1,6 +1,4 @@
-# The Algorithim Desing Canvas (MD)
-
-### 125. Valid Palindrome
+# 125. Valid Palindrome
 
 [Leetcode](https://leetcode.com/problems/valid-palindrome/description/)
 

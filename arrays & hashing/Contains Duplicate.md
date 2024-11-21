@@ -1,6 +1,4 @@
-# The Algorithim Desing Canvas (MD)
-
-### 217. Contains Duplicate
+# 217. Contains Duplicate
 
 [Leetcode](https://leetcode.com/problems/contains-duplicate/description/)
 
