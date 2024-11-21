@@ -1,6 +1,4 @@
-# The Algorithim Desing Canvas (MD)
-
-### TITLE
+# TITLE
 
 [Leetcode](LINK)
 
