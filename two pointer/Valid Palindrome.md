@@ -1,6 +1,6 @@
 # The Algorithim Desing Canvas (MD)
 
-### Valid Palindrome
+### 125. Valid Palindrome
 
 [Leetcode](https://leetcode.com/problems/valid-palindrome/description/)
 
@@ -42,33 +42,41 @@ Example 1
 ### Code
 
 ```typescript
-function isPalindrome(s: string): boolean{
-    let left = 0
-    let right = s.length - 1
-    s = s.toLowerCase()
-    while(left < right){
-        let leftCode = s[left].charCodeAt(0)
-        if(!((leftCode >= 48 && leftCode <= 57) || (leftCode >= 97 && leftCode <=122))){
-            left++
-            continue
-        }
-
-        let rightCode = s[right].charCodeAt(0)
-
-        if(!((rightCode >= 48 && rightCode <= 57) || (rightCode >= 97 && rightCode <=122))){
-            right--
-            continue
-        }
-
-
-        if(leftCode !== rightCode){
-            return false;
-        }
-        left++
-        right--
+function isPalindrome(s: string): boolean {
+  let left = 0;
+  let right = s.length - 1;
+  s = s.toLowerCase();
+  while (left < right) {
+    let leftCode = s[left].charCodeAt(0);
+    if (
+      !(
+        (leftCode >= 48 && leftCode <= 57) ||
+        (leftCode >= 97 && leftCode <= 122)
+      )
+    ) {
+      left++;
+      continue;
     }
 
-    return true
-}
+    let rightCode = s[right].charCodeAt(0);
 
+    if (
+      !(
+        (rightCode >= 48 && rightCode <= 57) ||
+        (rightCode >= 97 && rightCode <= 122)
+      )
+    ) {
+      right--;
+      continue;
+    }
+
+    if (leftCode !== rightCode) {
+      return false;
+    }
+    left++;
+    right--;
+  }
+
+  return true;
+}
 ```
