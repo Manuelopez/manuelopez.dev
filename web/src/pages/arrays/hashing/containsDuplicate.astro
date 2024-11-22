@@ -1,0 +1,180 @@
+
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+
+<Layout title="Welcome to Astro.">
+	<main>
+    <h1>Contains Duplicate</h1>
+    <a>Leetcode</a>
+    <div class="parent">
+      <div>
+        <div>
+          <h2>Constraints</h2>
+          <ul id="constraints">
+          </ul>
+        </div>
+
+        <div>
+          <h2>Ideas</h2>
+          <div id="idea"></div>
+        </div>
+        <div id="test" style="white-space:pre-wrap;">
+          <h2>Tests</h2>
+        </div>
+      </div>
+      <div>
+        <h2>Code</h5>
+        <div id="code" style="white-space:pre-wrap;">
+        </div>
+      </div>
+    </div>
+	</main>
+</Layout>
+<script>
+// :values
+const code = `
+function containsDuplicate(nums: number[]): boolean{
+    let found: Map<number, boolean> = new Map<number, boolean>()
+
+    for(let x of nums){
+        if(found.has(x)){
+            return true
+        }else{
+            found.set(x, true)
+        }
+    }
+    return false
+}
+`
+
+const constraints = [
+  "1 <= nums.length <= 10^5",
+  "-10^9 <= nums[i] <= 10^9"
+]
+
+const ideas = [
+  {
+    title: "Frequency Counter", 
+    timeComplexity: "O(n)", spaceComplexity: "O(n)",
+    steps: [
+      "Create a hashmap with key nums[i] and boolean value",
+      [
+        "Loop through the array",
+        "if nums[i] does not exist set value in map to true",
+        "else return true"
+      ],
+      "loop ends then return false"
+    ]
+  }
+]
+
+const tests = [
+  {
+    input: `[1,2,3,1]`, 
+    output: `true`, 
+    explanation: `1 appears 2 times in the array we return true`,
+    inputVal: [1,2,3,1],
+    outputVal: true 
+  }
+]
+
+// :elements
+
+const constraintElement = document.getElementById("constraints") as HTMLUListElement;
+const ideasElement = document.getElementById("idea") as HTMLDivElement;
+const testElement = document.getElementById("test") as HTMLDivElement;
+const codeElement = document.getElementById("code") as HTMLDivElement;
+
+
+// :initializing 
+for(let c of constraints){
+  const li = document.createElement('li')
+  li.innerText = c 
+  constraintElement.appendChild(li)
+}
+
+for(let i of ideas){
+  const parentDiv = document.createElement('div')
+  const descriptionDiv = document.createElement('div')
+  const title = document.createElement('h4')
+  title.innerText = i.title
+  descriptionDiv.appendChild(title)
+
+  const stepsUl = document.createElement('ul')
+
+  for(let s of i.steps){
+
+    const stepLi = document.createElement('li')
+    if(typeof s === 'string'){
+      stepLi.innerText = s
+      stepsUl.appendChild(stepLi)
+    }else{
+    const titleLi = document.createElement('li')
+    titleLi.innerText = s[0]
+    const newParentUl = document.createElement('ul')
+    makeUlListForIdeas(newParentUl, s, 1)
+    titleLi.appendChild(newParentUl)
+    stepsUl.appendChild(titleLi)
+    }
+  }
+  descriptionDiv.appendChild(stepsUl)
+  
+  const complexitiesDiv = document.createElement('div')
+  const timeDiv = document.createElement('div')
+  const spaceDiv = document.createElement('div')
+  timeDiv.innerText = `Time: ${i.timeComplexity}`
+  spaceDiv.innerText = `Space: ${i.spaceComplexity}`
+  complexitiesDiv.appendChild(timeDiv)
+  complexitiesDiv.appendChild(spaceDiv)
+
+  parentDiv.appendChild(descriptionDiv)
+  parentDiv.appendChild(complexitiesDiv)
+
+  ideasElement.appendChild(parentDiv)
+
+}
+
+
+for(let i = 0; i < tests.length; i++){
+  const exampleDiv = document.createElement('div')
+  exampleDiv.innerText = `Example #${i+1}:
+    Input: ${tests[i].input}
+    Output: ${tests[i].output}
+    Explanation: ${tests[i].explanation}
+`
+
+  testElement.appendChild(exampleDiv)
+
+}
+
+
+codeElement.innerText = code
+
+function makeUlListForIdeas(parent: any, list: any[], index: number) {
+  if(index >= list.length){return}
+  if(typeof list[index] === 'string'){
+    const stepLi = document.createElement('li')
+    stepLi.innerText = list[index]
+    parent.appendChild(stepLi)
+  }else{ 
+    const titleLi = document.createElement('li')
+    titleLi.innerText = list[index][0]
+    const newParentUl = document.createElement('ul')
+    makeUlListForIdeas(newParentUl, list[index], 1)
+    titleLi.appendChild(newParentUl)
+    parent.appendChild(titleLi)
+  }
+  makeUlListForIdeas(parent, list, index+1)
+
+
+}
+
+</script>
+
+<style>
+.parent{
+  display: flex;
+  flex-direction: row;
+}
+</style>
