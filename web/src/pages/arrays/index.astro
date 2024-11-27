@@ -1,14 +1,72 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import Layout from "../../layouts/Layout.astro";
 ---
 
 <Layout title="Welcome to Astro.">
-	<main>
+  <main>
     <h1>Arrays</h1>
     <ul>
       <li>Contiguos in moemory</li>
-      <li>2D or #D arrays is just a flat 1d array in memory</li>
+      <li>Constant time access</li>
     </ul>
-	</main>
-</Layout>
 
+    <h2>Problems</h2>
+    <table>
+      <thead>
+        <tr id="trHeader"> </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </main></Layout
+>
+
+<script>
+  enum typeOfProblem {
+    Hashing = "Hashing",
+  }
+
+  // :elements
+  const trHeaderElement = document.getElementById(
+    "trHeader",
+  ) as HTMLTableRowElement;
+  const tbodyElement = document.getElementById(
+    "tableBody",
+  ) as HTMLTableSectionElement;
+
+  // :data
+  const tableHeaders = ["Problem", "Type", "Leetcode url", "My Solution"];
+
+  const tableBody = [
+    [
+      "217. Contains Duplicate",
+      typeOfProblem.Hashing,
+      "https://leetcode.com/problems/contains-duplicate/description/",
+      "hashing/containsDuplicate/",
+    ],
+  ];
+
+  // :loading
+  // :loader :header
+  for (let header of tableHeaders) {
+    const th = document.createElement("th");
+    th.innerText = header;
+    trHeaderElement.appendChild(th);
+  }
+
+  // :loader :tbody
+  for (let row of tableBody) {
+    const tr = document.createElement("tr");
+    for (let i = 0; i < row.length; i++) {
+      const td = document.createElement("td");
+      if (i === row.length - 1) {
+        td.innerHTML = `<a href=${row[i]}>Solution</a>`;
+      } else if (i === row.length - 2) {
+        td.innerHTML = `<a href=${row[i]}>Leetcode</a>`;
+      } else {
+        td.innerText = row[i];
+      }
+      tr.appendChild(td);
+    }
+    tbodyElement.appendChild(tr);
+  }
+</script>
