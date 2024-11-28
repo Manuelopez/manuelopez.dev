@@ -1,6 +1,7 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import CD from "../../../components/problem.tsx";
+import Layout from "../../../../layouts/Layout.astro";
+import Problem from "../../../../components/problem";
+import TestTab from "./testTab";
 
 const title = "217. Contains Duplicate";
 const description = `
@@ -54,14 +55,14 @@ const tests = [
 
 <Layout title="Welcome to Astro.">
   <main>
-    <CD
+    <Problem
       title={title}
       description={description}
       constraints={constraints}
       ideas={ideas}
       tests={tests}
       code={code}
-      client:load
-    />
+      client:load><TestTab /></Problem
+    >
   </main>
 </Layout>

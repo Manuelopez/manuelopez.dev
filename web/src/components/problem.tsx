@@ -1,4 +1,5 @@
 import { useState } from 'preact/hooks';
+import { type ComponentChildren } from 'preact';
 
 function ListItem({ listItem }: { listItem: string | string[] }) {
   return (
@@ -28,7 +29,7 @@ export default function ContainsDuplice({
   description,
   constraints,
   ideas,
-  tests,
+  children,
   code,
 }: {
   title: string;
@@ -49,6 +50,7 @@ export default function ContainsDuplice({
     inputVal: number[];
     outputVal: boolean;
   }[];
+  children: ComponentChildren;
 }) {
   const [currentTab, setCurrentTab] = useState(0);
 
@@ -129,7 +131,7 @@ export default function ContainsDuplice({
               </div>
             </>
           )}
-          {currentTab === 2 && <></>}
+          {currentTab === 2 && <>{children}</>}
         </div>
         <div id='code' style={{ width: '60%' }}>
           <h2>Code</h2>
