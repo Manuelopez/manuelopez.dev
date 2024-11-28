@@ -2,9 +2,15 @@ import { useState } from 'preact/hooks';
 
 function ListItem({ listItem }: { listItem: string | string[] }) {
   return (
-    <li>
-      {Array.isArray(listItem) ? <List list={listItem} /> : <p>{listItem}</p>}
-    </li>
+    <>
+      {Array.isArray(listItem) ? (
+        <List list={listItem} />
+      ) : (
+        <li>
+          <p>{listItem}</p>
+        </li>
+      )}
+    </>
   );
 }
 
@@ -28,14 +34,21 @@ export default function ContainsDuplice({
   title: string;
   description: string;
   constraints: string[];
+
+  code: string;
   ideas: {
     title: string;
     timeComplexity: string;
     spaceComplexity: string;
     steps: (string | string[])[];
   }[];
-  tests: string[];
-  code: string;
+  tests: {
+    input: string;
+    output: string;
+    explanation: string;
+    inputVal: number[];
+    outputVal: boolean;
+  }[];
 }) {
   const [currentTab, setCurrentTab] = useState(0);
 

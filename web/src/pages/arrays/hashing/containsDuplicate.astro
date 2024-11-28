@@ -1,10 +1,8 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import CD from "../../../components/containsDuplicateComponent.tsx";
+import CD from "../../../components/problem.tsx";
 
-
-
-const title = '217. Contains Duplicate';
+const title = "217. Contains Duplicate";
 const description = `
 Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
 `;
@@ -23,21 +21,22 @@ function containsDuplicate(nums: number[]): boolean{
 }
 `;
 
-const constraints = ['1 <= nums.length <= 10^5', '-10^9 <= nums[i] <= 10^9'];
+const constraints = ["1 <= nums.length <= 10^5", "-10^9 <= nums[i] <= 10^9"];
 
 const ideas = [
   {
-    title: 'Frequency Counter',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(n)',
+    title: "Frequency Counter",
+    timeComplexity: "O(n)",
+    spaceComplexity: "O(n)",
     steps: [
-      'Create a hashmap with key nums[i] and boolean value',
+      "Create a hashmap with key nums[i] and boolean value",
+
+      "Loop through the array",
       [
-        'Loop through the array',
-        'if nums[i] does not exist set value in map to true',
-        'else return true',
+        "if nums[i] does not exist set value in map to true",
+        "else return true",
       ],
-      'loop ends then return false',
+      "loop ends then return false",
     ],
   },
 ];
@@ -51,24 +50,18 @@ const tests = [
     outputVal: true,
   },
 ];
-
-
 ---
 
-
-
-
 <Layout title="Welcome to Astro.">
-  <main><CD 
-    title={title}
-    description={description}
-    constraints={constraints}
-    ideas={ideas}
-    tests={tests}
-    code={code}
-
-    client:load
-
-  /></main>
+  <main>
+    <CD
+      title={title}
+      description={description}
+      constraints={constraints}
+      ideas={ideas}
+      tests={tests}
+      code={code}
+      client:load
+    />
+  </main>
 </Layout>
-

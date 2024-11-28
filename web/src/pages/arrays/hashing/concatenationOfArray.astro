@@ -1,0 +1,74 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import CD from "../../../components/problem.tsx";
+
+const title = "129. Concatenation of Array";
+const description = `
+Given an integer array nums of length n, you want to create an array ans of length 2n where ans[i] == nums[i] and ans[i + n] == nums[i] for 0 <= i < n (0-indexed).
+
+Specifically, ans is the concatenation of two nums arrays.
+
+Return the array ans.
+`;
+
+const code = `
+
+function getConcatenation(nums: number[]): number[] {
+  const n = nums.length
+  const m = nums.length * 2
+  const newArray = Array(m).fill(0)
+
+  for(let i = 0; i < m; i++){
+    newArray[i] = nums[i%n]
+  }
+
+  return newArray
+    
+}
+
+`;
+
+const constraints = [
+  "n == nums.length",
+  "1 <= n <= 1000",
+  "1 <= nums[i] <= 1000",
+];
+
+const ideas = [
+  {
+    title: "New Array",
+    timeComplexity: "O(n)",
+    spaceComplexity: "O(n)",
+    steps: [
+      "Create new array of size (2 * n)",
+      "Loop through the array until i == 2*n -1",
+      ["set newArray[i] == nums[i%n]"],
+      "return newArray",
+    ],
+  },
+];
+
+const tests = [
+  {
+    input: `[1,2,1]`,
+    output: `[1, 2, 1, 1, 2, 1]`,
+    explanation: ``,
+    inputVal: [1, 2, 1],
+    outputVal: [1, 2, 1, 1, 2, 1],
+  },
+];
+---
+
+<Layout title="Welcome to Astro.">
+  <main>
+    <CD
+      title={title}
+      description={description}
+      constraints={constraints}
+      ideas={ideas}
+      tests={tests}
+      code={code}
+      client:load
+    />
+  </main>
+</Layout>
