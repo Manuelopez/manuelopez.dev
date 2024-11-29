@@ -1,6 +1,6 @@
 ---
-import Layout from "../../../../layouts/Layout.astro";
-import Problem from "../../../../components/problem";
+import Layout from "../../../../../layouts/Layout.astro";
+import Problem from "../../../../../components/problem";
 
 const title = "1299. Replace Elements with greates Element on Right Side";
 const description = `
@@ -35,6 +35,7 @@ const ideas = [
   },
 ];
 
+const code = `
 function replaceElements(arr: number[]): number[] {
   let max = -1;
   const n = arr.length - 1;
@@ -49,20 +50,6 @@ function replaceElements(arr: number[]): number[] {
   }
 
   return arr;
-}
-
-const code = `
-function containsDuplicate(nums: number[]): boolean{
-  let found: Map<number, boolean> = new Map<number, boolean>()
-
-  for(let x of nums){
-      if(found.has(x)){
-          return true
-      }else{
-          found.set(x, true)
-      }
-  }
-  return false
 }
 `;
 ---

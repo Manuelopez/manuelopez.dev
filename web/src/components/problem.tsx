@@ -47,8 +47,8 @@ export default function ContainsDuplice({
     input: string;
     output: string;
     explanation: string;
-    inputVal: number[];
-    outputVal: boolean;
+    inputVal: any;
+    outputVal: any;
   }[];
   children: ComponentChildren;
 }) {
