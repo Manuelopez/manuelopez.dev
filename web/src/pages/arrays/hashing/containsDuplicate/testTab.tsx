@@ -1,3 +1,3 @@
 export default function ContainsDuplicateTestTab() {
-  return <h1>qasdfkasdkfljasdlkfjsadklfjue</h1>;
+  return <h1></h1>;
 }

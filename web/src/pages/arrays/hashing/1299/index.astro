@@ -1,0 +1,82 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import Problem from "../../../../components/problem";
+
+const title = "1299. Replace Elements with greates Element on Right Side";
+const description = `
+Given an array arr, replace every element in that array with the greatest element among the elements to its right, and replace the last element with -1.
+
+After doing so, return the array.
+`;
+
+const tests = [
+  {
+    input: `[18,6,6,6,1,-1]`,
+    output: `true`,
+    explanation: `todo`,
+    inputVal: [17, 18, 5, 4, 6, 1],
+    outputVal: [18, 6, 6, 6, 1, -1],
+  },
+];
+
+const constraints = ["1 <= nums.length <= 10^5", "-10^9 <= nums[i] <= 10^9"];
+
+const ideas = [
+  {
+    title: "loop array backwoards",
+    timeComplexity: "O(n)",
+    spaceComplexity: "O(1)",
+    steps: [
+      "max value = -1",
+      "Loop through the array",
+      ["let curr = arr[i]", "let arr[i] = max", "if curr > max; curr = max"],
+      "return arr",
+    ],
+  },
+];
+
+function replaceElements(arr: number[]): number[] {
+  let max = -1;
+  const n = arr.length - 1;
+
+  for (let i = n; i >= 0; i--) {
+    let curr = arr[i];
+    arr[i] = max;
+
+    if (curr > max) {
+      max = curr ;
+    }
+  }
+
+  return arr;
+}
+
+const code = `
+function containsDuplicate(nums: number[]): boolean{
+  let found: Map<number, boolean> = new Map<number, boolean>()
+
+  for(let x of nums){
+      if(found.has(x)){
+          return true
+      }else{
+          found.set(x, true)
+      }
+  }
+  return false
+}
+`;
+---
+
+<Layout title="Welcome to Astro.">
+  <main>
+    <Problem
+      title={title}
+      description={description}
+      constraints={constraints}
+      ideas={ideas}
+      tests={tests}
+      code={code}
+      client:load><></></Problem
+    >
+  </main>
+</Layout>
