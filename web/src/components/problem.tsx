@@ -1,5 +1,5 @@
-import { useState } from 'preact/hooks';
-import { type ComponentChildren } from 'preact';
+import { useState } from 'react';
+const variables: any = {};
 
 function ListItem({ listItem }: { listItem: string | string[] }) {
   return (
@@ -18,8 +18,8 @@ function ListItem({ listItem }: { listItem: string | string[] }) {
 function List({ list }: { list: (string | string[])[] }) {
   return (
     <ul>
-      {list.map((listItem) => (
-        <ListItem listItem={listItem} />
+      {list.map((listItem, i) => (
+        <ListItem key={`$list-${i}`} listItem={listItem} />
       ))}
     </ul>
   );
@@ -28,15 +28,18 @@ export default function ContainsDuplice({
   title,
   description,
   constraints,
+  tests,
   ideas,
-  children,
+  tester,
+  variables,
   code,
 }: {
   title: string;
   description: string;
   constraints: string[];
-
-  code: string;
+  variables: any;
+  tester: any;
+  code: string[];
   ideas: {
     title: string;
     timeComplexity: string;
@@ -50,9 +53,11 @@ export default function ContainsDuplice({
     inputVal: any;
     outputVal: any;
   }[];
-  children: ComponentChildren;
 }) {
   const [currentTab, setCurrentTab] = useState(0);
+
+  const [tInstance, setTestInstance] = useState(tester());
+  let linesSpace = 0;
 
   return (
     <div
@@ -110,16 +115,16 @@ export default function ContainsDuplice({
               <div>
                 <h2>Constraints</h2>
                 <ul>
-                  {constraints.map((c) => {
-                    return <li>{c}</li>;
+                  {constraints.map((c, i) => {
+                    return <li key={`constrains-${i}`}>{c}</li>;
                   })}
                 </ul>
               </div>
               <div>
                 <h2>Ideas</h2>
-                {ideas.map((i) => {
+                {ideas.map((i, idx) => {
                   return (
-                    <div>
+                    <div key={`ideas-${idx}`}>
                       <p>
                         {i.title} Time: {i.timeComplexity} Space:{' '}
                         {i.spaceComplexity}
@@ -131,13 +136,49 @@ export default function ContainsDuplice({
               </div>
             </>
           )}
-          {currentTab === 2 && <>{children}</>}
+          {currentTab === 2 && (
+            <div>
+              {tests.map((t, i) => {
+                return (
+                  <div key={`test-${i}`}>
+                    <h2>Test {i + 1}</h2>
+                    <p>
+                      <strong>Input</strong> {t.input}
+                    </p>
+                    <p>
+                      <strong> Output</strong> {t.output}
+                    </p>
+                    <button
+                      onClick={() => {
+                        console.log(tInstance.next());
+                      }}
+                    >
+                    Runnn the thing init
+                  </button>
+                  </div>
+          );
+              })}
         </div>
-        <div id='code' style={{ width: '60%' }}>
-          <h2>Code</h2>
-          <div>{code}</div>
-        </div>
+          )}
+      </div>
+      <div id='code' style={{ width: '60%' }}>
+        <h2>Code</h2>
+        {code.map((c, i) => {
+          if (c[0] === '}') {
+            linesSpace--;
+          }
+          let val = (
+            <div key={`line-${i}`} id={'line-' + (i + 1).toString()}>
+              <pre style={{ paddingLeft: 50 * linesSpace }}>{c}</pre>
+            </div>
+          );
+          if (c[c.length - 1] === '{') {
+            linesSpace++;
+          }
+          return val;
+        })}
       </div>
     </div>
+    </div >
   );
 }
