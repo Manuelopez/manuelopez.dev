@@ -57,6 +57,10 @@ export default function ContainsDuplice({
   const [currentTab, setCurrentTab] = useState(0);
 
   const [tInstance, setTestInstance] = useState(tester());
+  const [linesToolTip, setLinesToolTip] = useState(
+    Array.from({ length: code.length }, () => ({ text: '', display: 'none' })),
+  );
+
   let linesSpace = 0;
 
   return (
@@ -150,35 +154,48 @@ export default function ContainsDuplice({
                     </p>
                     <button
                       onClick={() => {
-                        console.log(tInstance.next());
+                        let values = tInstance.next().value;
+                        let emptyTooltip = Array.from(
+                          { length: code.length },
+                          () => ({ text: '', display: 'none' }),
+                        );
+                        emptyTooltip[values[1]].text = values[0];
+                        emptyTooltip[values[1]].display = 'block';
+                        setLinesToolTip(emptyTooltip);
                       }}
                     >
-                    Runnn the thing init
-                  </button>
+                      Runnn the thing init
+                    </button>
                   </div>
-          );
+                );
               })}
-        </div>
-          )}
-      </div>
-      <div id='code' style={{ width: '60%' }}>
-        <h2>Code</h2>
-        {code.map((c, i) => {
-          if (c[0] === '}') {
-            linesSpace--;
-          }
-          let val = (
-            <div key={`line-${i}`} id={'line-' + (i + 1).toString()}>
-              <pre style={{ paddingLeft: 50 * linesSpace }}>{c}</pre>
             </div>
-          );
-          if (c[c.length - 1] === '{') {
-            linesSpace++;
-          }
-          return val;
-        })}
+          )}
+        </div>
+        <div id='code' style={{ width: '60%' }}>
+          <h2>Code</h2>
+          {code.map((c, i) => {
+            if (c[0] === '}') {
+              linesSpace--;
+            }
+            let val = (
+              <div key={`line-${i}`} id={'line-' + (i + 1).toString()}>
+                <pre style={{ paddingLeft: 50 * linesSpace }}>{c}</pre>
+                <div
+                  id={`tooltip-line-${i}`}
+                  style={{ display: linesToolTip[i].display }}
+                >
+                  {linesToolTip[i].text}
+                </div>
+              </div>
+            );
+            if (c[c.length - 1] === '{') {
+              linesSpace++;
+            }
+            return val;
+          })}
+        </div>
       </div>
     </div>
-    </div >
   );
 }
