@@ -1,70 +1,59 @@
 import Problem from '../../../../../components/problem';
 
-const title = '392. IsSubsequence';
+const title = '58. Lngth of last Word';
 const description = `
-Given two strings s and t return true if s is a suvsequence of t or false otherwise
+Given a string s consisting of words and spaces return the length of the last word in the string
 
-A sybsequence of a string isa new string that is formed from the original string by deleting some (can be none) of the caracters without disturbing the relative positions remaning characters(ie. "ace" is a suvsequece of "abcde" while "aec" is not)
+A word is a maximal substring consisting of non-space caracters
 `;
 
 const constraints = [
-  '0 <= s.length <= 100',
-  '- <= t.length <= 10^4',
-  's and t consist only of lowecase english letters',
+  '1 <= s.lenth <= 10^4',
+  's consists of only english letters and spaces',
+  'There will be atleast one word in s',
 ];
 
 const ideas = [
   {
-    title: 'two pointers',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    steps: [
-      'pointer i for t',
-      'pointer j for s',
-      'loop the string t',
-      ['if t[i] === t[j]', ['j++']],
-      'return j === s.length',
-    ],
+    title: 'split function',
+    timeComplexity: 'O(n) + O(split function)',
+    spaceComplexity: 'O(n)',
+    steps: [`let split = s.split(' ')`, 'return split[split.length-1].length'],
   },
+
+  /* { */
+  /*   title: 'loop', */
+  /*   timeComplexity: 'O(n)', */
+  /*   spaceComplexity: 'O(1)', */
+  /*   steps: [ */
+  /*     ``, */
+  /*     'return split[split.length-1].length' */
+  /*   ], */
+  /* }, */
 ];
 
 const tests = [
   {
-    input: `s = "abc", t= "ahbgdc"`,
-    output: `true`,
-    explanation: `s is a substring`,
-    inputVal: { s: 'abc', t: 'ahbgdc' },
-    outputVal: true,
+    input: `s = "hello world"`,
+    output: `5`,
+    explanation: `The last word is "world" with length 5`,
+    inputVal: { s: 'hello world' },
+    outputVal: 5,
   },
 ];
 
-function isSubsequence(s: string, t: string): boolean {
-  let j = 0;
-  for (let i = 0; i < t.length; i++) {
-    if (t[i] === s[j]) {
-      j++;
-    }
-    if (j === s.length) {
-      return true;
-    }
-  }
-
-  return j === s.length;
+function lengthOfLastWord(s: string): number {
+  let words = s.split(' ');
+  words = words.filter((w) => w !== '');
+  return words[words.length - 1].length;
 }
 
 const code = [
-  'function isSubsequence(s: string, t: string): boolean {',
-  'let j = 0;',
-  'for (let i = 0; i < t.length; i++) {',
-  'if (t[i] === s[j]) {',
-  'j++;',
-  '}',
-  'if (j === s.length) {',
-  'return true;',
-  '}',
-  '}',
-  'return j === s.length;',
-  '}',
+  `function lengthOfLastWord(s: string): number {`,
+  `let words = s.split(' ');`,
+  `words = words.filter((w) => w !== '')`,
+  `return words[words.length - 1].length;`,
+  `}`,
 ];
 
 //TODO tester
