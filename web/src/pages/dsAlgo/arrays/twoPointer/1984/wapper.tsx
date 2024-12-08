@@ -51,12 +51,22 @@ function minimumDifference(nums: number[], k: number): number {
   if (k === 1) {
     return 0;
   }
-  let diffrence = nums[0];
-  for (let i = 1; i < k; i++) {
-    diffrence -= sorted[i];
+
+  let i = 0;
+  let j = 1;
+
+  let minK = sorted[j] - sorted[i];
+  while (j < sorted.length) {
+    let k = sorted[j] - sorted[i];
+    if (k < minK) {
+      minK = k;
+    }
+
+    i++;
+    j++;
   }
 
-  return diffrence;
+  return minK;
 }
 
 const code = [
