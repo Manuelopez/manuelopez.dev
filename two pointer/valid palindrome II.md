@@ -17,9 +17,9 @@ two pointer T: O(N), S: O(1)
 - right = s.length
 - while left < right
   - if s[left] != s[right]
-    - check which one we move the left one or right one
-    - if none of them work return false
-    - else update one of the pointers and continue
+    - generate sub string skiping left
+    - generate sub string skiping right
+    - check if either is a palnidrome if it is return true else return false
 - return true
 ```
 
@@ -27,9 +27,8 @@ two pointer T: O(N), S: O(1)
 
 ```markdown
 - Example 1
-  - input: [1,2,3,1]
+  - input: s = "aba"
   - Output: true
-  - Explanation: 1 appears 2 times in the array we return true
 ```
 
 ### Code
@@ -42,9 +41,9 @@ function validPalindrome(s: string): boolean{
 
     while(left < right){
         if(s[left] !== s[right]){
-             const skipLeft = s.substring(left+1);
+             const skipLeft = s.substring(left+1, right +1);
              const skipRight = s.substring(left, right);
-             return (skipLeft.split("").reverse().join() === skipLeft || skipRight.split("").reverse().join() === skipRight)
+             return (skipLeft.split("").reverse().join("") === skipLeft || skipRight.split("").reverse().join("") === skipRight)
         }
         left++
         right--
