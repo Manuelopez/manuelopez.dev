@@ -14,13 +14,22 @@ const constraints = ['1  <= k <= nums.length <= 1000', '0 <= nums[i] <= 10^5'];
 
 const ideas = [
   {
-    title: 'Sort',
+    title: 'two pointers',
     timeComplexity: 'O(n * log(n))',
     spaceComplexity: 'O(1)',
     steps: [
-      `Sort array ascending`,
-      `take k elemtns and get the difference`,
-      'return the difference',
+      `Sort array`,
+      `minK variable = Infinity`,
+      'left pointer = 0 ',
+      'right pointer = k ',
+      'loop until right pointer out of bouds',
+      [
+        'calculate the current diffrecence between left and right pointer',
+        'if currentK is less than minK',
+        ['set minK to currentK'],
+        'left++',
+        'right ++',
+      ],
     ],
   },
 
@@ -52,23 +61,22 @@ function minimumDifference(nums: number[], k: number): number {
     return 0;
   }
 
-  let i = 0;
-  let j = 1;
-
-  let minK = sorted[j] - sorted[i];
-  while (j < sorted.length) {
-    let k = sorted[j] - sorted[i];
-    if (k < minK) {
-      minK = k;
+  let l = 0;
+  let r = k - 1;
+  let minK = Infinity;
+  while (r < sorted.length) {
+    let cK = Math.abs(nums[r] - nums[l]);
+    if (cK < minK) {
+      minK = cK;
     }
-
-    i++;
-    j++;
+    l++;
+    r++;
   }
 
   return minK;
 }
 
+// TODO: halo tu cono orita cuando te en esta parte mmg
 const code = [
   `function lengthOfLastWord(s: string): number {`,
   `let words = s.split(' ');`,
