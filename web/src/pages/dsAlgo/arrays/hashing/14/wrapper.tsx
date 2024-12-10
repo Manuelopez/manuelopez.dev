@@ -1,68 +1,70 @@
-import Problem from '../../../../components/problem';
+import Problem from '../../../../../components/problem';
 
-const title = '144. Binrary tree Preorder';
-
+const title = '14. Longest Common Prefix';
 const description = `
-Given the root of a binary tree, return the preorder of its nodes values
+Write a function to find the longest common prefix string amongst an array of strings.
+
+If there is no common prefix, return an empty string "".
 `;
 
-// TODO: mirraa no son array hazmele tu real implementation al jodio TREEE pa que se haga una vaina bacana
 const tests = [
   {
-    input: `[1,null,2,3]`,
-    output: `[1,2,3]`,
-    explanation: `mann i ain explaing this ro you now`,
-    inputVal: { nums: [1, 3, 5, 6], target: 5 }, // TODO oite TODO queeeee TODO
-    outputVal: 2, // TMB TU REAL TODO
+    input: `strs = ["flower","flow","flight"]`,
+    output: `"fl"`,
+    explanation: `Because nums[0] nums [1] === 9, we return [0, 1]`,
+    inputVal: { strs: ['flower', 'flow', 'flight'] },
+    outputVal: 'fl',
   },
 ];
 
 const constraints = [
-  'The number of nodes in the tree is in the range [0,100]',
-  '-100 <= Node.val <= 100',
+  '1 <= strs.length <= 200',
+  '0 <= strs[i].length <= 200',
+  'strs[i] consists of only lowercase English letters',
 ];
 
-// TODO solo esta bez que ya casi terminio
 const ideas = [
   {
-    title: 'Recursion',
+    title: 'loop with shortes length',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(n)',
-    steps: [],
+    steps: [
+      'lcp variable ',
+      'loop array strs[0]',
+      [
+        'lop strs.length',
+        [
+          'if i > strs[j] length',
+          ['return lcp'],
+
+          ['if strs[j][i]!== strs[0][i]', ['return lcp']],
+        ],
+        'add cracter to lcp',
+      ],
+      'return lcp',
+    ],
   },
 ];
 
-class TreeNode {
-  val: number;
-  left: TreeNode | null;
-  right: TreeNode | null;
-  constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
-    this.val = val === undefined ? 0 : val;
-    this.left = left === undefined ? null : left;
-    this.right = right === undefined ? null : right;
-  }
-}
+function longestCommonPrefix(strs: string[]): string {
+  let lcp = '';
 
-function preorderTraversal(root: TreeNode | null): number[] {
-  let order: number[] = [];
+  for (let i = 0; i < strs[0].length; i++) {
+    for (let j = 0; j < strs.length; j++) {
+      if (i > strs[j].length) {
+        return lcp;
+      }
+      if (strs[j][i] !== strs[0][i]) {
+        return lcp;
+      }
+    }
 
-  helper(root, order)
-
-  return order;
-}
-
-function helper(node: TreeNode | null, order: number[]) {
-  if (node === null) {
-    return;
+    lcp += strs[0][i];
   }
 
-  order.push(node.val)
-  helper(node.left, order)
-  helper(node.right, order)
-
+  return lcp;
 }
 
-// TODO: TUUUU cono TUUUUU
 const code = [
   'function isSubsequence(s: string, t: string): boolean {',
   'let j = 0;',
@@ -80,7 +82,6 @@ const code = [
 
 //TODO tester
 const variables: any = {};
-
 function* tester() {
   variables.nums = [1, 2, 3, 4, 1];
   yield ['function name, initialize nums', 0];
