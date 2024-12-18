@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { List } from './list';
 import { useParams } from 'react-router';
 import { dsAlgoData } from '../data';
 
@@ -19,27 +18,24 @@ export function Problem() {
   const [tests] = useState(
     currData.problems[params.pId as keyof typeof currData.problems].tests,
   );
-  const [ideas] = useState(
-    currData.problems[params.pId as keyof typeof currData.problems].ideas,
-  );
-  const [tInstance] = useState(
-    currData.problems[
-      params.pId as keyof typeof currData.problems
-    ].tester.generaator(tests[0].inputVal),
-  );
-  const [code] = useState(
-    currData.problems[params.pId as keyof typeof currData.problems].code
-      .toString()
-      .split('\n'),
-  );
+
+  const [ideas, setIdeas] = useState<
+    {
+      title: string;
+      steps: string;
+      timeComplexity: string;
+      spaceComplexity: string;
+    }[]
+  >([
+    {
+      title: 'test1',
+      steps: 'test steps',
+      timeComplexity: 'N',
+      spaceComplexity: 'LogN',
+    },
+  ]);
 
   const [currentTab, setCurrentTab] = useState(0);
-
-  const [linesToolTip, setLinesToolTip] = useState(
-    Array.from({ length: code.length }, () => ({ text: '', display: 'none' })),
-  );
-
-  let linesSpace = 0;
 
   return (
     <div
@@ -102,16 +98,46 @@ export function Problem() {
                   })}
                 </ul>
               </div>
-              <div>
+              <div
+                style={{
+                  borderTop: '2px solid black',
+                  borderBottom: '2px solid black',
+                  borderLeft: '2px solid black',
+                }}
+              >
                 <h2>Ideas</h2>
+
+                <hr
+                  style={{ padding: 'none', marginTop: 0, marginBottom: 0 }}
+                />
                 {ideas.map((i, idx) => {
                   return (
-                    <div key={`ideas-${idx}`}>
-                      <p>
-                        {i.title} Time: {i.timeComplexity} Space:{' '}
-                        {i.spaceComplexity}
-                        <List list={i.steps} />
-                      </p>
+                    <div key={`idea-${idx}`} style={{ width: '100%' }}>
+                      <input
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          border: 'none',
+                          display: 'inline',
+                          padding: 'none',
+                        }}
+                        value={i.title}
+                      ></input>
+                      <div style={{ display: 'flex' }}>
+                        <textarea style={{ width: '50%' }} value={i.steps} />
+                        <div style={{ width: '50%' }}>
+                          <div>{`O(${i.timeComplexity})`}</div>
+                          <hr
+                            style={{
+                              width: '',
+                              padding: 'none',
+                              marginTop: 0,
+                              marginBottom: 0,
+                            }}
+                          />
+                          <div>{`O(${i.spaceComplexity})`}</div>
+                        </div>
+                      </div>
                     </div>
                   );
                 })}
@@ -130,48 +156,21 @@ export function Problem() {
                     <p>
                       <strong> Output</strong> {t.output}
                     </p>
-                    <button
-                      onClick={() => {
-                        let values = tInstance.next().value as any;
-                        let emptyTooltip = Array.from(
-                          { length: code.length },
-                          () => ({ text: '', display: 'none' }),
-                        );
-                        emptyTooltip[values[1]].text = values[0];
-                        emptyTooltip[values[1]].display = 'block';
-                        setLinesToolTip(emptyTooltip);
-                      }}
-                    >
-                      Runnn the thing init
-                    </button>
+                    <button onClick={() => {}}>Runnn the thing init</button>
                   </div>
                 );
               })}
             </div>
           )}
         </div>
-        <div id='code' style={{ width: '60%' }}>
+        <div
+          id='code'
+          style={{
+            width: '60%',
+            border: '2px solid black',
+          }}
+        >
           <h2>Code</h2>
-          {code.map((c, i) => {
-            if (c[0] === '}') {
-              linesSpace--;
-            }
-            let val = (
-              <div key={`line-${i}`} id={'line-' + (i + 1).toString()}>
-                <pre style={{ paddingLeft: 50 * linesSpace }}>{c}</pre>
-                <div
-                  id={`tooltip-line-${i}`}
-                  style={{ display: linesToolTip[i].display }}
-                >
-                  {linesToolTip[i].text}
-                </div>
-              </div>
-            );
-            if (c[c.length - 1] === '{') {
-              linesSpace++;
-            }
-            return val;
-          })}
         </div>
       </div>
     </div>
