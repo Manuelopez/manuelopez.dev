@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { dsAlgoData } from '../data';
+import ts from 'typescript';
 
 export function Problem() {
   const params = useParams() as { ds: 'array'; pId: string };
@@ -17,6 +18,9 @@ export function Problem() {
   );
   const [tests] = useState(
     currData.problems[params.pId as keyof typeof currData.problems].tests,
+  );
+  const [code, setCode] = useState(
+    currData.problems[params.pId as keyof typeof currData.problems].codeStarter,
   );
 
   const [ideas, setIdeas] = useState<
@@ -121,12 +125,47 @@ export function Problem() {
                           display: 'inline',
                           padding: 'none',
                         }}
+                        onChange={(e) => {
+                          let copy = JSON.parse(
+                            JSON.stringify(ideas),
+                          ) as typeof ideas;
+                          copy[idx].title = e.target.value;
+                          setIdeas(copy);
+                        }}
                         value={i.title}
                       ></input>
                       <div style={{ display: 'flex' }}>
-                        <textarea style={{ width: '50%' }} value={i.steps} />
+                        <textarea
+                          onChange={(e) => {
+                            let copy = JSON.parse(
+                              JSON.stringify(ideas),
+                            ) as typeof ideas;
+                            copy[idx].steps = e.target.value;
+                            setIdeas(copy);
+                          }}
+                          style={{ width: '50%' }}
+                          value={i.steps}
+                        />
                         <div style={{ width: '50%' }}>
-                          <div>{`O(${i.timeComplexity})`}</div>
+                          <div>
+                            Time Complexity
+                            <input
+                              style={{
+                                width: '100%',
+                                border: 'none',
+                                display: 'inline',
+                                padding: 'none',
+                              }}
+                              onChange={(e) => {
+                                let copy = JSON.parse(
+                                  JSON.stringify(ideas),
+                                ) as typeof ideas;
+                                copy[idx].timeComplexity = e.target.value;
+                                setIdeas(copy);
+                              }}
+                              value={i.timeComplexity}
+                            ></input>
+                          </div>
                           <hr
                             style={{
                               width: '',
@@ -135,7 +174,26 @@ export function Problem() {
                               marginBottom: 0,
                             }}
                           />
-                          <div>{`O(${i.spaceComplexity})`}</div>
+
+                          <div>
+                            Space Complexity
+                            <input
+                              style={{
+                                width: '100%',
+                                border: 'none',
+                                display: 'inline',
+                                padding: 'none',
+                              }}
+                              onChange={(e) => {
+                                let copy = JSON.parse(
+                                  JSON.stringify(ideas),
+                                ) as typeof ideas;
+                                copy[idx].spaceComplexity = e.target.value;
+                                setIdeas(copy);
+                              }}
+                              value={i.spaceComplexity}
+                            ></input>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -157,6 +215,20 @@ export function Problem() {
                       <strong> Output</strong> {t.output}
                     </p>
                     <button onClick={() => {}}>Runnn the thing init</button>
+                    <button
+                      onClick={() => {
+                        let jsCode = ts.transpileModule(code, {
+                          compilerOptions: {
+                            module: ts.ModuleKind.CommonJS,
+                            target: ts.ScriptTarget.ESNext,
+                          },
+                        }).outputText;
+                        let func = new Function('return ' + jsCode)();
+                        console.log(func(t.inputVal.nums) === t.outputVal);
+                      }}
+                    >
+                      Check if output are equal
+                    </button>
                   </div>
                 );
               })}
@@ -171,6 +243,11 @@ export function Problem() {
           }}
         >
           <h2>Code</h2>
+          <textarea
+            style={{ width: '100%', minHeight: 200 }}
+            onChange={(e) => setCode(e.target.value)}
+            value={code}
+          />
         </div>
       </div>
     </div>
