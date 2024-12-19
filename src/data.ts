@@ -21,7 +21,9 @@ Given an integer array nums, return true if any value appears at least twice in 
         ],
 
         codeStarter: `function (nums: number[]): boolean {
-// variables
+// We asume every variables exist in the variables object
+  let variables: any = {}
+  variables.nums = nums
 
 }`,
 

@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useParams } from 'react-router';
 import { dsAlgoData } from '../data';
 import ts from 'typescript';
+import Modal from 'react-modal';
 
+Modal.setAppElement('#root');
 export function Problem() {
   const params = useParams() as { ds: 'array'; pId: string };
 
@@ -13,6 +15,7 @@ export function Problem() {
   const [description] = useState(
     currData.problems[params.pId as keyof typeof currData.problems].description,
   );
+
   const [constraints] = useState(
     currData.problems[params.pId as keyof typeof currData.problems].constraints,
   );
@@ -21,6 +24,18 @@ export function Problem() {
   );
   const [code, setCode] = useState(
     currData.problems[params.pId as keyof typeof currData.problems].codeStarter,
+  );
+  const [currentlyExplaning, setCurrentlyExplaining] = useState({
+    text: '',
+    line: 0,
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [generatorCode, setGeneratorCode] = useState(
+    currData.problems[params.pId as keyof typeof currData.problems].codeStarter,
+  );
+  const [linesExplanation, setLineExplanation] = useState<string[]>([]);
+  const [testter, setTester] = useState<null | Generator<unknown, any, any>>(
+    null,
   );
 
   const [ideas, setIdeas] = useState<
@@ -40,6 +55,7 @@ export function Problem() {
   ]);
 
   const [currentTab, setCurrentTab] = useState(0);
+  const [currentTabRight, setCurrentTabRight] = useState(0);
 
   return (
     <div
@@ -214,7 +230,25 @@ export function Problem() {
                     <p>
                       <strong> Output</strong> {t.output}
                     </p>
-                    <button onClick={() => {}}>Runnn the thing init</button>
+                    <button
+                      onClick={() => {
+                        console.log(generatorCode);
+
+                        let jsCode = ts.transpileModule(generatorCode, {
+                          compilerOptions: {
+                            module: ts.ModuleKind.CommonJS,
+                            target: ts.ScriptTarget.ESNext,
+                          },
+                        }).outputText;
+                        let gen = new Function(
+                          'return ' + jsCode,
+                        ) as GeneratorFunction;
+                        console.log(gen)
+                        setTester(gen(t.inputVal));
+                      }}
+                    >
+                      Start Test By Step
+                    </button>
                     <button
                       onClick={() => {
                         let jsCode = ts.transpileModule(code, {
@@ -223,12 +257,23 @@ export function Problem() {
                             target: ts.ScriptTarget.ESNext,
                           },
                         }).outputText;
-                        let func = new Function('return ' + jsCode)();
+                        let func = new Function('return ' + jsCode)() as (
+                          nums: number[],
+                        ) => boolean;
                         console.log(func(t.inputVal.nums) === t.outputVal);
                       }}
                     >
                       Check if output are equal
                     </button>
+                    {testter !== null && (
+                      <button
+                        onClick={() => {
+                          console.log(testter.next());
+                        }}
+                      >
+                        Next Step
+                      </button>
+                    )}
                   </div>
                 );
               })}
@@ -242,12 +287,83 @@ export function Problem() {
             border: '2px solid black',
           }}
         >
-          <h2>Code</h2>
-          <textarea
-            style={{ width: '100%', minHeight: 200 }}
-            onChange={(e) => setCode(e.target.value)}
-            value={code}
-          />
+          <div>
+            <div onClick={() => setCurrentTabRight(0)}>Edit</div>
+            <div
+              onClick={() => {
+                let copy = generatorCode.split('\n');
+                if (!copy[0].includes('function*')) {
+                  copy[0] = copy[0].replace('function', 'function*');
+                }
+                setGeneratorCode(copy.join('\n'));
+                console.log(copy.join('\n'));
+                setCurrentTabRight(1);
+              }}
+            >
+              Explain
+            </div>
+          </div>
+          {currentTabRight === 0 && (
+            <>
+              <h2>Edit Code</h2>
+              <textarea
+                style={{ width: '100%', minHeight: 200 }}
+                onChange={(e) => {
+                  setCode(e.target.value);
+                  setGeneratorCode(code);
+                }}
+                value={code}
+              />
+            </>
+          )}
+          {currentTabRight === 1 && (
+            <>
+              <h2>Explain code</h2>
+              {code.split('\n').map((c, idx) => {
+                let value = (
+                  <div
+                    key={`explain-${idx}`}
+                    onClick={() => {
+                      setIsModalOpen(true);
+                      setCurrentlyExplaining({ text: '', line: idx });
+                    }}
+                  >
+                    <pre>{c}</pre>
+                    {linesExplanation[idx] && (
+                      <pre>{linesExplanation[idx]}</pre>
+                    )}
+                  </div>
+                );
+                return value;
+              })}
+            </>
+          )}
+          <Modal isOpen={isModalOpen}>
+            <div>
+              <input
+                value={currentlyExplaning.text}
+                onChange={(e) => {
+                  let copy = JSON.parse(
+                    JSON.stringify(currentlyExplaning),
+                  ) as typeof currentlyExplaning;
+                  copy.text = e.target.value;
+                  setCurrentlyExplaining(copy);
+                }}
+              />
+              <button
+                onClick={() => {
+                  const text = `yield {text: ${currentlyExplaning.text}\ `;
+                  let x = generatorCode
+                    .split('\n')
+                    .toSpliced(currentlyExplaning.line + 1, 0, text);
+                  setLineExplanation(Array(x.length).fill(''));
+                  setIsModalOpen(false);
+                }}
+              >
+                addExplanation
+              </button>
+            </div>
+          </Modal>
         </div>
       </div>
     </div>
