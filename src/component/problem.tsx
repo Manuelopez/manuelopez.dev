@@ -38,6 +38,10 @@ export function Problem() {
     null,
   );
 
+  const [currentTestVariables, setCurrentTestVariables] = useState<null | any>(
+    null,
+  );
+
   const [ideas, setIdeas] = useState<
     {
       title: string;
@@ -53,6 +57,7 @@ export function Problem() {
       spaceComplexity: 'LogN',
     },
   ]);
+  let [explained, setExplained] = useState(0);
 
   const [currentTab, setCurrentTab] = useState(0);
   const [currentTabRight, setCurrentTabRight] = useState(0);
@@ -232,19 +237,15 @@ export function Problem() {
                     </p>
                     <button
                       onClick={() => {
-                        console.log(generatorCode);
-
                         let jsCode = ts.transpileModule(generatorCode, {
                           compilerOptions: {
                             module: ts.ModuleKind.CommonJS,
                             target: ts.ScriptTarget.ESNext,
                           },
                         }).outputText;
-                        let gen = new Function(
-                          'return ' + jsCode,
-                        ) as GeneratorFunction;
-                        console.log(gen)
-                        setTester(gen(t.inputVal));
+                        // TODO figure out the types ok
+                        let gen = new Function('return ' + jsCode)();
+                        setTester(gen(t.inputVal.nums));
                       }}
                     >
                       Start Test By Step
@@ -260,7 +261,9 @@ export function Problem() {
                         let func = new Function('return ' + jsCode)() as (
                           nums: number[],
                         ) => boolean;
-                        console.log(func(t.inputVal.nums) === t.outputVal);
+                        if (func(t.inputVal.nums) === t.outputVal) {
+                          // todo this should be pass by the object
+                        }
                       }}
                     >
                       Check if output are equal
@@ -268,7 +271,21 @@ export function Problem() {
                     {testter !== null && (
                       <button
                         onClick={() => {
-                          console.log(testter.next());
+                          let n = testter.next();
+
+                          if (n.done) {
+                            setTester(null);
+                          } else {
+                            console.log((n.value as any).variables!);
+                            setCurrentTestVariables(
+                              (n.value as any).variables!,
+                            );
+                            let copy = new Array(linesExplanation.length).fill(
+                              '',
+                            );
+                            copy[(n.value as any).line] = (n.value as any).text;
+                            setLineExplanation(copy);
+                          }
                         }}
                       >
                         Next Step
@@ -277,6 +294,9 @@ export function Problem() {
                   </div>
                 );
               })}
+              {currentTestVariables !== null && (
+                <div>{JSON.stringify(currentTestVariables)}</div>
+              )}
             </div>
           )}
         </div>
@@ -352,11 +372,17 @@ export function Problem() {
               />
               <button
                 onClick={() => {
-                  const text = `yield {text: ${currentlyExplaning.text}\ `;
-                  let x = generatorCode
+                  const text = `yield {text: '${currentlyExplaning.text}', variables: variables, line: ${currentlyExplaning.line} }`;
+                  let newGeneratorCode = generatorCode
                     .split('\n')
-                    .toSpliced(currentlyExplaning.line + 1, 0, text);
-                  setLineExplanation(Array(x.length).fill(''));
+                    .toSpliced(
+                      currentlyExplaning.line + 1 + explained,
+                      0,
+                      text,
+                    );
+                  setExplained(explained + 1);
+                  setGeneratorCode(newGeneratorCode.join('\n'));
+                  setLineExplanation(Array(newGeneratorCode.length).fill(''));
                   setIsModalOpen(false);
                 }}
               >
